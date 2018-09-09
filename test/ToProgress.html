@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="background-color: #0dd3ff">
+<script src="../lib/ToProgress/ToProgress.min.js"></script>
+<script>
+    var options = {
+        id: 'top-progress-bar',
+        color: '#f41924',
+        height: '4px',
+        duration: 0.2
+    };
+    var progressBar = new ToProgress(options);
+    var progress = 1;
+
+    var progressId = setInterval(function () {
+        console.log(progress);
+        progressBar.setProgress(progress * 10);
+        progress += 2 * progress;
+        if (progressBar.getProgress() >= 80) {
+            //progressBar.finish();
+            clearInterval(progressId);
+        }
+    }, progress * 400);
+</script>
+</body>
+</html>
