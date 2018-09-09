@@ -46,6 +46,7 @@ function save() {
         }, function (data) {
             //alert("Data Loaded: " + data);
             console.log(data)
+            alertTip(data)
             setTimeout(function () {
                 progressBar.finish();
             }, 300);
@@ -58,8 +59,10 @@ function alertTip(tip) {
         $('#alert_' + timeId).alert('close')
     }, 1000);
 
-    $('#contain').after(
-        '<div class="alert alert-warning alert-dismissible fade in show" role="alert" id="alert_' + timeId + '"><strong>警告!  </strong>' +
+    $('#alert_div').css('top', window.document.body.scrollTop || window.document.documentElement.scrollTop);
+
+    $('#alert_div').append(
+        '<div class="alert alert-warning alert-dismissible fade in show" role="alert" id="alert_' + timeId + '"><strong>提示!  </strong>' +
         tip +
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></div>'
     );
