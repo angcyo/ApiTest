@@ -15,7 +15,16 @@ createFolder($data_path);
 
 $query_args = $_SERVER['QUERY_STRING'];
 
-logToFile('request.log', $query_args);
+$ua = '';
+if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    $ua = $_SERVER['HTTP_USER_AGENT'];
+}
+
+logToFile('request.log',
+    $ua . "\n" .
+    $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_HOST'] . ':' . $_SERVER['REMOTE_PORT'] . ':' . $_SERVER['REMOTE_USER'] . "\n" .
+    $query_args
+);
 
 if (!empty($query_args)) {
     $query_string = urldecode($query_args);
@@ -97,7 +106,13 @@ if (!empty($query_args)) {
 function logToFile($fileName, $log)
 {
     //date_default_timezone_set("Asia/Shanghai");
-    file_put_contents($fileName, date("Y-m-d H:i:s", time() - 8 * 60 * 60) . "\n" . $log . "\n\n", FILE_APPEND);
+
+    if (strcmp(date_default_timezone_get(), 'PRC') == 0) {
+        $time = time();
+    } else {
+        $time = time() - 8 * 60 * 60;
+    }
+    file_put_contents($fileName, date("Y-m-d H:i:s", $time) . "\n" . $log . "\n\n", FILE_APPEND);
 }
 
 function createFolder($path)
