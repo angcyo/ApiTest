@@ -33,10 +33,26 @@ $(function () {
         $.cookie('api_data', $(this).val());
     });
 
+    $('#api_data').bind('input propertychange', function () {
+        //console.log($(this).val());
+        cookieData(this)
+    });
+    $('#api_data').focusout(function () {
+        cookieData(this, true)
+    });
+
     $('#api_url').val($.cookie('api_url'));
     $('#api_data').val($.cookie('api_data'));
     $('#api_tip').text(getApiUrl($.cookie('api_url')));
 });
+
+function cookieData(element, format = false) {
+    if (format) {
+        const result = JSON.stringify(JSON.parse($(element).val()), null, 4);
+        $(element).val(result);
+    }
+    $.cookie('api_data', $(element).val());
+}
 
 function save() {
     const api_url = $('#api_url').val();
