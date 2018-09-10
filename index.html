@@ -23,13 +23,20 @@
         </div>
         <div class="content_bg">
             <div class="form-group">
-                <strong class="text_tip">接口地址</strong>
+                <strong class="text_tip">接口地址
+                    <small id="api_tip" style="font-size: 16px"></small>
+                </strong>
 
                 <div class="input-group mb-3">
                     <input id="api_url" type="text" class="form-control" placeholder="输入接口地址">
                     <div class="input-group-append">
                         <button class="btn btn-success input-group-text" id="copy_url" href="#">
                             复制接口地址
+                        </button>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary input-group-text" id="open_url" href="#">
+                            测试
                         </button>
                     </div>
                 </div>

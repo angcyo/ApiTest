@@ -1,15 +1,20 @@
 $(function () {
-    var clipboard = new ClipboardJS('#copy_url', {
+    const clipboard = new ClipboardJS('#copy_url', {
         text: function () {
-            return window.location.href + $('#api_url').val();
+            return getApiUrl($('#api_url').val());
         }
     });
     clipboard.on('success', function (e) {
-        alert("复制成功->" + e.text);
+        alertTip("复制成功->" + e.text);
     });
 
     clipboard.on('error', function (e) {
         console.log(e);
+        alertTip(e);
+    });
+
+    $('#open_url').on('click', function () {
+        window.open(getApiUrl($('#api_url').val()));
     });
 
     $.cookie.defaults = {
@@ -17,8 +22,11 @@ $(function () {
     };
 
     $('#api_url').on("input propertychange", function () {
+        // alertTip($(this).val());
         //console.log($(this).val());
         $.cookie('api_url', $(this).val());
+
+        $('#api_tip').text(getApiUrl($(this).val()));
     });
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
@@ -27,18 +35,19 @@ $(function () {
 
     $('#api_url').val($.cookie('api_url'));
     $('#api_data').val($.cookie('api_data'));
+    $('#api_tip').text(getApiUrl($.cookie('api_url')));
 });
 
 function save() {
-    var api_url = $('#api_url').val();
-    var api_data = $('#api_data').val();
+    const api_url = $('#api_url').val();
+    const api_data = $('#api_data').val();
 
     if (!api_url) {
         alertTip("接口地址不能为空.");
     } else if (!api_data) {
         alertTip("返回数据不能为空.");
     } else {
-        var progressBar = showProgressBar();
+        const progressBar = showProgressBar();
 
         $.post('php/' + encodeURI(api_url), {
             data: api_data,
@@ -55,7 +64,7 @@ function save() {
 }
 
 function alertTip(tip) {
-    var timeId = setTimeout(function () {
+    const timeId = setTimeout(function () {
         $('#alert_' + timeId).alert('close')
     }, 1000);
 
@@ -88,4 +97,11 @@ function showProgressBar() {
     }, progress * Math.round(4) * 10);
 
     return progressBar;
+}
+
+function getApiUrl(query) {
+    //const q = query.replace('index.html', '');
+    const url = window.location.href.replace('index.html', '');
+    const api_path = 'php/';
+    return url + api_path + query;
 }
