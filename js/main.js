@@ -119,5 +119,9 @@ function getApiUrl(query) {
     //const q = query.replace('index.html', '');
     const url = window.location.href.replace('index.html', '');
     const api_path = 'php/';
-    return url + api_path + query;
+    if (query === undefined) {
+        return url + api_path;
+    } else {
+        return url + api_path + query;
+    }
 }
