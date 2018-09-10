@@ -18,6 +18,8 @@ if (!file_exists($folder) || !is_dir($folder)) {
 
 $query_string = $_SERVER['QUERY_STRING'];
 if (!empty($query_string)) {
+    logToFile('api_log.log', $query_string);
+
     $query = preg_replace('# #', '', $_SERVER['QUERY_STRING']);
 
     $data = isset($_REQUEST['data']) ? $_REQUEST['data'] : "";
@@ -51,4 +53,8 @@ if (!empty($query_string)) {
     echo "empty";
 }
 
-
+function logToFile($fileName, $log)
+{
+    //date_default_timezone_set("Asia/Shanghai");
+    file_put_contents($fileName, date("Y-m-d H:i:s", time() - 8 * 60 * 60) . "\n" . $log . "\n\n", FILE_APPEND);
+}
