@@ -13,11 +13,16 @@ $data_path = 'data';
 //数据保存目录
 createFolder($data_path);
 
-$query_string = $_SERVER['QUERY_STRING'];
-if (!empty($query_string)) {
+$query_args = $_SERVER['QUERY_STRING'];
+
+logToFile('request.log', $query_args);
+
+if (!empty($query_args)) {
+    $query_string = urldecode($query_args);
+
     logToFile('api_log.log', $query_string);
     //去掉url中的空格字符
-    $query = preg_replace('# #', '', $_SERVER['QUERY_STRING']);
+    $query = preg_replace('# #', '', $query_string);
 
     // a//b////c/  过滤多余的/分隔符
     $qs = explode('/', $query);
@@ -95,7 +100,6 @@ function logToFile($fileName, $log)
     file_put_contents($fileName, date("Y-m-d H:i:s", time() - 8 * 60 * 60) . "\n" . $log . "\n\n", FILE_APPEND);
 }
 
-
 function createFolder($path)
 {
     $cwd = getcwd();
@@ -109,6 +113,7 @@ function createFolder($path)
 
         if (!file_exists($folder) || !is_dir($folder)) {
             $res = mkdir($folder, 0777, true) or die($folder . " create folder failed.");
+            chmod($folder, 0777);
         }
     }
 

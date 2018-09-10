@@ -122,6 +122,6 @@ function getApiUrl(query) {
     if (query === undefined) {
         return url + api_path;
     } else {
-        return url + api_path + query;
+        return url + api_path + query.replace(/(^\s*)|(\s*$)/g, "") + "..end";
     }
 }
