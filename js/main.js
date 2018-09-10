@@ -24,7 +24,7 @@ $(function () {
     $('#api_url').on("input propertychange", function () {
         // alertTip($(this).val());
         //console.log($(this).val());
-        $.cookie('api_url', $(this).val());
+        $.cookie('api_url', trim($(this).val()));
 
         $('#api_tip').text(getApiUrl($(this).val()));
     });
@@ -115,6 +115,10 @@ function showProgressBar() {
     return progressBar;
 }
 
+function trim(str) {
+    return str.replace(/\ +/g, "");
+}
+
 function getApiUrl(query) {
     //const q = query.replace('index.html', '');
     const url = window.location.href.replace('index.html', '');
@@ -122,6 +126,6 @@ function getApiUrl(query) {
     if (query === undefined) {
         return url + api_path;
     } else {
-        return url + api_path + query.replace(/(^\s*)|(\s*$)/g, "") + "..end";
+        return url + api_path + trim(query);
     }
 }
