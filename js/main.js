@@ -1,7 +1,7 @@
 $(function () {
     const clipboard = new ClipboardJS('#copy_url', {
         text: function () {
-            return getApiUrl($('#api_url').val());
+            return getCurrentUrl();
         }
     });
     clipboard.on('success', function (e) {
@@ -24,11 +24,10 @@ $(function () {
     $('#api_url').on("input propertychange", function () {
         // alertTip($(this).val());
         //console.log($(this).val());
-        $.cookie('api_url', trim($(this).val()));
-
-        $('#api_tip').text(getApiUrl($(this).val()));
-
+        showUrl($(this).val());
         $('#data_tip_list').show();
+
+        showDataListTip();
     });
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
@@ -44,13 +43,12 @@ $(function () {
     $('#api_url').focusout(function () {
         console.log("失去焦点!");
         //关闭提示框
-        $('#data_tip_list').hide();
+        // $('#data_tip_list').fadeOut();
+        hideDataListTip();
     });
     $('#api_url').focus(function () {
         console.log("得到焦点!");
         //显示提示框
-        $('#data_tip_list').show();
-
         showDataListTip();
     });
 
@@ -68,17 +66,28 @@ $(function () {
     $('#data_tip_list').scrollbar();
 });
 
-function cookieData(element, format = false) {
+function showUrl(url) {
+    $.cookie('api_url', trim(url));
+    $('#api_tip').text(getApiUrl(url));
+    $('#api_url').val(trim(url));
+}
+
+function cookieData(element, format) {
     $value = $(element).val();
-    if (format) {
+
+    if (format && trim($value).length) {
+        console.log('check json:' + $value);
         try {
             const result = JSON.stringify(JSON.parse($value), null, 4);
             $(element).val(result);
+
+            console.log($value + " is json..");
         } catch (e) {
             console.log($value + "不是有效的json格式." + e);
             alertTip("不是有效的json格式..");
         }
     }
+
     $.cookie('api_data', $(element).val());
 }
 
@@ -144,12 +153,22 @@ function showProgressBar() {
 }
 
 function trim(str) {
+    if (str === undefined) {
+        return "";
+    }
     return str.replace(/\ +/g, "");
+}
+
+function getCurrentUrl() {
+    return getApiUrl($('#api_url').val());
 }
 
 function getApiUrl(query) {
     //const q = query.replace('index.html', '');
-    const url = window.location.href.replace('index.html', '');
+    const url = window.location.protocol + '//' + window.location.host + window.location.pathname.replace('index.html', '');
+    // console.log(window.location.pathname);
+    // console.log(url);
+
     const api_path = 'php/';
     if (query === undefined) {
         return url + api_path;
@@ -159,8 +178,79 @@ function getApiUrl(query) {
 }
 
 function showDataListTip() {
-// <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Cras justo odio</a>
+// <a href="#" class="list-group-item  ">Cras justo odio</a>
+    $url = getApiUrl('data_list.php');
+    // console.log($url);
+
+    $have = false;
     $.get(getApiUrl('data_list.php'), function (data) {
-        console.log(data);
+        // console.log(data);
+        $('#data_tip_list').children().remove();
+
+        $.each(JSON.parse(data), function (index, item) {
+            // console.log(item);
+
+            // console.log(item.indexOf($('#api_url').val()));
+
+            if (item.indexOf($('#api_url').val()) === 0) {
+                $have = true;
+                $chid = $('<a>');
+                $chid.attr('href', '#');
+                $chid.addClass('list-group-item').addClass('list-group-item-action').addClass('list-group-item-action-r');
+                $chid.text(item);
+                $chid.val('item_data:' + item);
+                $chid.attr('item_data', item);
+                $chid.on('click', function () {
+                    // console.log($(this).val());
+                    //console.log($(this).attr('item_data'));
+
+                    showUrl($(this).attr('item_data'));
+                    getDataToShow();
+                });
+
+                $('#data_tip_list').append($chid);
+                // $('#data_tip_list').append('<a href="#" class="list-group-item list-group-item-action list-group-item-action-r">' + item + '</a>');
+                // console.log('add:' + $chid);
+            }
+        });
+        // $('#data_tip_list').height(10);
+        // console.log('设置高度');
+
+        // $('#data_tip_list').css('height', 400);
+        // $('#data_tip_list').css('max-height', 400);
+
+        // $('#data_tip_list').show();
+
+        // $('#data_tip_list').fadeIn();
+
+        if ($have) {
+            if ($('#data_tip_list').parent().hasClass("scroll-wrapper")) {
+                $('#data_tip_list').parent().show();
+                $('#data_tip_list').parent().animate({'opacity': 1}, 300);
+            }
+            $('#data_tip_list').animate({'opacity': 1}, 300);
+        } else {
+            hideDataListTip();
+        }
+
+        // $(JSON.parse(data)).each(function (index, item) {
+        //     console.log(item);
+        // })
     })
+}
+
+function hideDataListTip() {
+    if ($('#data_tip_list').parent().hasClass("scroll-wrapper")) {
+        $('#data_tip_list').parent().animate({'opacity': 0}, 300, function () {
+            $('#data_tip_list').parent().hide();
+        });
+    }
+    $('#data_tip_list').animate({'opacity': 0}, 300);
+}
+
+function getDataToShow() {
+    $.get(getCurrentUrl(), function (data) {
+        $('#api_data').val(data);
+        cookieData($('#api_data'), true);
+    });
 }

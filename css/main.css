@@ -51,12 +51,14 @@
 .drop_list {
     /*border: 1px solid rgba(0, 0, 0, 0.125);*/
     /*box-shadow: 2px 2px rgba(0, 0, 0, .6);*/
+    /*background-color: #fff;*/
     box-shadow: 4px 4px 10px #888888;
     z-index: 10;
     /*overflow: auto;*/
     margin-top: -16px;
     margin-left: -2px;
-    max-height: 200px;
+    max-height: 500px;
     width: 780px;
     position: absolute;
+    opacity: 0;
 }

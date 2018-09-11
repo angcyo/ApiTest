@@ -15,14 +15,9 @@ createFolder($data_path);
 
 $query_args = $_SERVER['QUERY_STRING'];
 
-$ua = '';
-if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    $ua = $_SERVER['HTTP_USER_AGENT'];
-}
-
 logToFile('request.log',
-    $ua . "\n" .
-    $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_HOST'] . ':' . $_SERVER['REMOTE_PORT'] . ':' . $_SERVER['REMOTE_USER'] . "\n" .
+    getValue('HTTP_USER_AGENT') . "\n" .
+    getValue('REMOTE_ADDR') . ':' . getValue('REMOTE_HOST') . ':' . getValue('REMOTE_PORT') . ':' . getValue('REMOTE_USER') . "\n" .
     $query_args
 );
 
@@ -132,5 +127,13 @@ function createFolder($path)
             chmod($folder, 0777);
         }
     }
+}
 
+function getValue($key)
+{
+    $value = '';
+    if (isset($_SERVER[$key])) {
+        $value = $_SERVER[$key];
+    }
+    return $value;
 }
