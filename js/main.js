@@ -27,6 +27,8 @@ $(function () {
         $.cookie('api_url', trim($(this).val()));
 
         $('#api_tip').text(getApiUrl($(this).val()));
+
+        $('#data_tip_list').show();
     });
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
@@ -39,16 +41,31 @@ $(function () {
     $('#api_data').focusout(function () {
         cookieData(this, true)
     });
+    $('#api_url').focusout(function () {
+        console.log("失去焦点!");
+        //关闭提示框
+        $('#data_tip_list').hide();
+    });
+    $('#api_url').focus(function () {
+        console.log("得到焦点!");
+        //显示提示框
+        $('#data_tip_list').show();
+
+        showDataListTip();
+    });
 
     $('#api_url').val($.cookie('api_url'));
     $('#api_data').val($.cookie('api_data'));
     $('#api_tip').text(getApiUrl($.cookie('api_url')));
 
     $("body").overlayScrollbars({});
+    // $('#data_tip_list').overlayScrollbars({});
     //$('#api_data_wrap').overlayScrollbars({});
     // $('#api_data').overlayScrollbars({});
 
     // autoTextarea($('#api_data')[0]);
+
+    $('#data_tip_list').scrollbar();
 });
 
 function cookieData(element, format = false) {
@@ -58,7 +75,7 @@ function cookieData(element, format = false) {
             const result = JSON.stringify(JSON.parse($value), null, 4);
             $(element).val(result);
         } catch (e) {
-            console.log($value + "不是有效的json格式." + e)
+            console.log($value + "不是有效的json格式." + e);
             alertTip("不是有效的json格式..");
         }
     }
@@ -139,4 +156,11 @@ function getApiUrl(query) {
     } else {
         return url + api_path + trim(query);
     }
+}
+
+function showDataListTip() {
+// <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Cras justo odio</a>
+    $.get(getApiUrl('data_list.php'), function (data) {
+        console.log(data);
+    })
 }

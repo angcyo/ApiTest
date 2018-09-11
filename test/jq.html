@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .test_div {
+            /*border: 1px solid rgba(0, 0, 0, 0.125);*/
+            /*box-shadow: 2px 2px rgba(0, 0, 0, .6);*/
+            box-shadow: 4px 4px 10px #888888;
+            z-index: 10;
+            /*overflow: auto;*/
+            margin-top: -16px;
+            margin-left: -2px;
+            height: 100px;
+            max-height: 200px;
+            width: 780px;
+            position: absolute;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div style="position: relative">
+    <div style="background-color: #0c5460; height: 100px; " class="test_div" id="test_id"></div>
+</div>
+
+<script>
+    // $('div').show();
+    // $('#test_id').show();
+    $('.test_div').show();
+</script>
+</body>
+</html>
