@@ -47,3 +47,12 @@
 .placeholder {
     height: 100px;
 }
+
+.drop_list {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    overflow: auto;
+    height: 300px;
+    width: 500px;
+    display: block;
+    position: absolute;
+}

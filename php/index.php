@@ -107,12 +107,13 @@ function logToFile($fileName, $log)
 {
     //date_default_timezone_set("Asia/Shanghai");
 
-    if (strcmp(date_default_timezone_get(), 'PRC') == 0) {
+    if (strcmp(date_default_timezone_get(), 'PRC') == 0 ||
+        strcmp(date_default_timezone_get(), 'UTC') == 0) {
         $time = time();
     } else {
         $time = time() - 8 * 60 * 60;
     }
-    file_put_contents($fileName, date("Y-m-d H:i:s", $time) . "\n" . $log . "\n\n", FILE_APPEND);
+    file_put_contents($fileName, date_default_timezone_get() . ' ' . date("Y-m-d H:i:s", $time) . "\n" . $log . "\n\n", FILE_APPEND);
 }
 
 function createFolder($path)

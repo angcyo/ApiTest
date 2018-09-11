@@ -30,9 +30,8 @@ $(function () {
     });
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
-        $.cookie('api_data', $(this).val());
+        cookieData(this)
     });
-
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
         cookieData(this)
@@ -44,12 +43,24 @@ $(function () {
     $('#api_url').val($.cookie('api_url'));
     $('#api_data').val($.cookie('api_data'));
     $('#api_tip').text(getApiUrl($.cookie('api_url')));
+
+    $("body").overlayScrollbars({});
+    //$('#api_data_wrap').overlayScrollbars({});
+    // $('#api_data').overlayScrollbars({});
+
+    // autoTextarea($('#api_data')[0]);
 });
 
 function cookieData(element, format = false) {
+    $value = $(element).val();
     if (format) {
-        const result = JSON.stringify(JSON.parse($(element).val()), null, 4);
-        $(element).val(result);
+        try {
+            const result = JSON.stringify(JSON.parse($value), null, 4);
+            $(element).val(result);
+        } catch (e) {
+            console.log($value + "不是有效的json格式." + e)
+            alertTip("不是有效的json格式..");
+        }
     }
     $.cookie('api_data', $(element).val());
 }
