@@ -57,6 +57,9 @@ $(function () {
     $('#api_tip').text(getApiUrl($.cookie('api_url')));
 
     $("body").overlayScrollbars({
+        overflowBehavior: {
+            x: 'hidden'
+        },
         callbacks: {
             onScroll: function (event) {
                 $('body').attr('scrollTopR', event.target.scrollTop);
