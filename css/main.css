@@ -62,3 +62,34 @@
     position: absolute;
     opacity: 0;
 }
+
+.item_size {
+    color: #FFF;
+    /*color: #8b11bd;*/
+    margin-left: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 6px;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+}
+.item_size:hover{
+    color: #FFF;
+}
+
+.item_close {
+    z-index: 20;
+    position: absolute;
+    right: 0;
+    margin-top: -13px;
+    margin-right: 1px;
+    padding: 6px;
+    font-size: 30px;
+    display: none;
+}
+
+.item_close:hover {
+    background-color: #25aaff;
+    border-radius: 0.25rem;
+}

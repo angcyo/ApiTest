@@ -1,5 +1,5 @@
 $(function () {
-    const clipboard = new ClipboardJS('#copy_url', {
+    let clipboard = new ClipboardJS('#copy_url', {
         text: function () {
             return getCurrentUrl();
         }
@@ -41,13 +41,13 @@ $(function () {
         cookieData(this, true)
     });
     $('#api_url').focusout(function () {
-        console.log("失去焦点!");
+        //console.log("失去焦点!");
         //关闭提示框
         // $('#data_tip_list').fadeOut();
         hideDataListTip();
     });
     $('#api_url').focus(function () {
-        console.log("得到焦点!");
+        //console.log("得到焦点!");
         //显示提示框
         showDataListTip();
     });
@@ -73,7 +73,7 @@ function showUrl(url) {
 }
 
 function cookieData(element, format) {
-    $value = $(element).val();
+    let $value = $(element).val();
 
     if (format && trim($value).length) {
         console.log('check json:' + $value);
@@ -131,16 +131,16 @@ function alertTip(tip) {
 }
 
 function showProgressBar() {
-    var options = {
+    let options = {
         id: 'top-progress-bar',
         color: '#f41924',
         height: '4px',
         duration: 0.2
     };
-    var progressBar = new ToProgress(options);
-    var progress = 1;
+    let progressBar = new ToProgress(options);
+    let progress = 1;
 
-    var progressId = setInterval(function () {
+    let progressId = setInterval(function () {
         progressBar.setProgress(progress * 10);
         progress += 2 * progress;
         if (progressBar.getProgress() >= 80) {
@@ -194,7 +194,7 @@ function showDataListTip() {
 
             if (item.indexOf($('#api_url').val()) === 0) {
                 $have = true;
-                $chid = $('<a>');
+                $chid = $('<a></a>');
                 $chid.attr('href', '#');
                 $chid.addClass('list-group-item').addClass('list-group-item-action').addClass('list-group-item-action-r');
                 $chid.text(item);
@@ -206,6 +206,31 @@ function showDataListTip() {
 
                     showUrl($(this).attr('item_data'));
                     getDataToShow();
+                });
+                $chid.mouseover(function () {
+                    // console.log('鼠标经过:' + $(this).attr('item_data'));
+                    // console.log($(this).children('.item_close'));
+                    $(this).children('.item_close').show();
+                    showFileSize($(this));
+                });
+                $chid.mouseout(function () {
+                    //console.log('鼠标离开:' + $(this).attr('item_data'));
+                    $(this).children('.item_close').hide();
+                    hideFileSize($(this));
+                });
+
+                $size = $('<span class="item_size"></span>');
+                $close = $('<span class="item_close">&times;</span>');
+                // $close.addClass('item_close');
+                $chid.append($size);
+                $chid.append($close);
+
+                $close.on('click', function () {
+                    // console.log($(this).val());
+                    //console.log($(this).attr('item_data'));
+                    //console.log('删除:' + $(this).parent().attr('item_data'));
+                    alertTip('权限不足,无法删除!');
+                    return false;
                 });
 
                 $('#data_tip_list').append($chid);
@@ -253,4 +278,60 @@ function getDataToShow() {
         $('#api_data').val(data);
         cookieData($('#api_data'), true);
     });
+}
+
+function showFileSize(item) {
+    $.ajax({
+        type: "POST",
+        url: getApiUrl($(item).val()),
+        complete: function (xhr, data) {
+            let length = xhr.getResponseHeader('Content-Length');
+            //console.log(length);
+            let $size = formatSize(length);
+            //console.log($size);
+            // console.log(xhr);
+            // console.log(data);
+            let item_size = $(item).children('.item_size');
+            //console.log(item_size.text());
+            item_size.text($size);
+
+            item_size.animate({'opacity': 1}, 300);
+        }
+    });
+}
+
+function hideFileSize(item) {
+    let item_size = $(item).children('.item_size');
+    item_size.animate({'opacity': 0}, 300);
+}
+
+function formatSize(fileSize) {
+    let arrUnit = ["B", "K", "M", "G", "T", "P"];
+    let powerIndex = Math.log2(fileSize) / 10;
+    powerIndex = Math.floor(powerIndex);
+    // index should in the unit range!
+    let len = arrUnit.length;
+    powerIndex = powerIndex < len ? powerIndex : len - 1;
+    let sizeFormatted = fileSize / Math.pow(2, powerIndex * 10);
+    sizeFormatted = sizeFormatted.toFixed(2);
+    return sizeFormatted + "" + arrUnit[powerIndex];
+}
+
+
+/// <summary>
+/// 格式化文件大小的JS方法
+/// </summary>
+/// <param name="filesize">文件的大小,传入的是一个bytes为单位的参数</param>
+/// <returns>格式化后的值</returns>
+function renderSize(value) {
+    if (null == value || value == '') {
+        return "0 Bytes";
+    }
+    var unitArr = new Array("Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
+    var index = 0;
+    var srcsize = parseFloat(value);
+    index = Math.floor(Math.log(srcsize) / Math.log(1024));
+    var size = srcsize / Math.pow(1024, index);
+    size = size.toFixed(2);//保留的小数位数
+    return size + unitArr[index];
 }

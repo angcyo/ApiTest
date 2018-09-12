@@ -115,7 +115,7 @@
     </div>
 
     <div class="list-group drop_list scrollbar-inner" id="list_content">
-        <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Cras justo odio</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Cras justo odio<span aria-hidden="true">&times;</span></a>
         <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Dapibus ac facilisis in</a>
         <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Morbi leo risus</a>
         <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Porta ac consectetur ac</a>
@@ -126,7 +126,7 @@
         <a href="#" class="list-group-item list-group-item-action list-group-item-action-r">Vestibulum at eros</a>
     </div>
 
-    <div style="height: 100px; background-color: #ff22e2">
+    <div id="mouse_div" style="height: 200px; background-color: #ff22e2">
 
     </div>
 
@@ -154,6 +154,14 @@
 
     $("body").overlayScrollbars({ });
     $('#list_content').overlayScrollbars({ });
+
+    $('#mouse_div').mouseover(function () {
+        console.log('鼠标经过:' + $(this).val());
+    });
+    $('#mouse_div').mouseout(function () {
+        console.log('鼠标离开:' + $(this).val());
+    });
+
 </script>
 </body>
 </html>
