@@ -306,6 +306,9 @@ function hideFileSize(item) {
 }
 
 function formatSize(fileSize) {
+    if (fileSize === undefined || null == fileSize || fileSize === '') {
+        fileSize = 0;
+    }
     let arrUnit = ["B", "K", "M", "G", "T", "P"];
     let powerIndex = Math.log2(fileSize) / 10;
     powerIndex = Math.floor(powerIndex);
