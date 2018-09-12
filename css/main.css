@@ -101,6 +101,10 @@
         height: 100%;
     }
 
+    .drop_list {
+        width: 360px;
+    }
+
     .content_bg {
         width: 98%;
         height: 100%;
