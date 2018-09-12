@@ -56,7 +56,15 @@ $(function () {
     $('#api_data').val($.cookie('api_data'));
     $('#api_tip').text(getApiUrl($.cookie('api_url')));
 
-    $("body").overlayScrollbars({});
+    $("body").overlayScrollbars({
+        callbacks: {
+            onScroll: function (event) {
+                $('body').attr('scrollTopR', event.target.scrollTop);
+                $('body').attr('scrollLeftR', event.target.scrollLeft);
+                //console.log('L:' + event.target.scrollLeft + ' T:' + event.target.scrollTop);
+            },
+        }
+    });
     // $('#data_tip_list').overlayScrollbars({});
     //$('#api_data_wrap').overlayScrollbars({});
     // $('#api_data').overlayScrollbars({});
@@ -121,7 +129,20 @@ function alertTip(tip) {
         $('#alert_' + timeId).alert('close')
     }, 1000);
 
-    $('#alert_div').css('top', window.document.body.scrollTop || window.document.documentElement.scrollTop);
+    //console.log(window.document.body.scrollTop);
+    //console.log(window.document.documentElement.scrollTop);
+
+    var top = $('body').attr('scrollTopR');
+    var left = $('body').attr('scrollLeftR');
+    //window.document.body.scrollTop || window.document.documentElement.scrollTop
+    // console.log();
+    top = (top === undefined) ? 0 : top;
+    left = (left === undefined) ? 0 : left;
+    //console.log(typeof top);
+    $('#alert_div').css({
+        'top': parseInt(top),
+        'right': -parseInt(left),
+    });
 
     $('#alert_div').append(
         '<div class="alert alert-warning alert-dismissible fade in show" role="alert" id="alert_' + timeId + '"><strong>提示!  </strong>' +
