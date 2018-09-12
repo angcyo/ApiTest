@@ -230,6 +230,7 @@ function showDataListTip() {
                     //console.log($(this).attr('item_data'));
                     //console.log('删除:' + $(this).parent().attr('item_data'));
                     alertTip('权限不足,无法删除!');
+                    $('#api_url').val('');
                     return false;
                 });
 
