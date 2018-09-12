@@ -76,12 +76,12 @@ function cookieData(element, format) {
     let $value = $(element).val();
 
     if (format && trim($value).length) {
-        console.log('check json:' + $value);
+        //console.log('check json:' + $value);
         try {
             const result = JSON.stringify(JSON.parse($value), null, 4);
             $(element).val(result);
 
-            console.log($value + " is json..");
+            //console.log($value + " is json..");
         } catch (e) {
             console.log($value + "不是有效的json格式." + e);
             alertTip("不是有效的json格式..");
@@ -281,21 +281,38 @@ function getDataToShow() {
 }
 
 function showFileSize(item) {
+    let value = $(item).attr('item_data');
+    // console.log(value);
+    let url = getApiUrl(value);
+    // console.log(url);
+    // return;
     $.ajax({
         type: "POST",
-        url: getApiUrl($(item).val()),
-        complete: function (xhr, data) {
-            let length = xhr.getResponseHeader('Content-Length');
-            console.log(length);
-            let $size = formatSize(length);
+        url: url,
+        /*data: "act=getFileSize",*/
+        data: {
+            'act': 'getFileSize'
+        },
+        complete: function (xhr, status) {
+            // let length = xhr.getResponseHeader('Content-Length');
+            // console.log(length);
+            // let $size = formatSize(length);
             //console.log($size);
             // console.log(xhr);
-            // console.log(data);
-            let item_size = $(item).children('.item_size');
+            //console.log('请求状态:' + status);
+            // let item_size = $(item).children('.item_size');
             //console.log(item_size.text());
+            // item_size.text($size);
+            // item_size.animate({'opacity': 1}, 300);
+        },
+        success: function (data) {
+            // let length = xhr.getResponseHeader('Content-Length');
+            let $size = formatSize(data);
+            let item_size = $(item).children('.item_size');
             item_size.text($size);
-
             item_size.animate({'opacity': 1}, 300);
+
+            console.log(data);
         }
     });
 }

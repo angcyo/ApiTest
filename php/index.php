@@ -83,7 +83,7 @@ if (!empty($query_args)) {
         } else {
             echo 'no query';
         }
-    } else {
+    } else if (strcasecmp($act, 'save') == 0) {
         //保存数据
         if (!empty($query) && !empty($data)) {
 //            $myfile = fopen('data/' . $query, "w");
@@ -93,6 +93,14 @@ if (!empty($query_args)) {
 //            echo $result;
             echo file_put_contents($file_name, $data) ? "保存成功" : "保存失败";
         }
+    } else if (strcasecmp($act, 'getFileSize') == 0) {
+        if (file_exists($file_name)) {
+            echo filesize($file_name);
+        } else {
+            echo 0;
+        }
+    } else {
+        echo "not support action.";
     }
 } else {
     echo "empty";
@@ -102,8 +110,8 @@ function logToFile($fileName, $log)
 {
     //date_default_timezone_set("Asia/Shanghai");
 
-    if (strcmp(date_default_timezone_get(), 'PRC') == 0 ||
-        strcmp(date_default_timezone_get(), 'UTC') == 0) {
+    if (strcasecmp(date_default_timezone_get(), 'PRC') == 0 ||
+        strcasecmp(date_default_timezone_get(), 'UTC') == 0) {
         $time = time();
     } else {
         $time = time() - 8 * 60 * 60;
