@@ -286,7 +286,7 @@ function showFileSize(item) {
         url: getApiUrl($(item).val()),
         complete: function (xhr, data) {
             let length = xhr.getResponseHeader('Content-Length');
-            //console.log(length);
+            console.log(length);
             let $size = formatSize(length);
             //console.log($size);
             // console.log(xhr);
@@ -306,10 +306,10 @@ function hideFileSize(item) {
 }
 
 function formatSize(fileSize) {
-    if (fileSize === undefined || null == fileSize || fileSize === '') {
-        fileSize = 0;
-    }
     let arrUnit = ["B", "K", "M", "G", "T", "P"];
+    if (fileSize === undefined || null == fileSize || fileSize === '') {
+        return 0 + "" + arrUnit[0];
+    }
     let powerIndex = Math.log2(fileSize) / 10;
     powerIndex = Math.floor(powerIndex);
     // index should in the unit range!
