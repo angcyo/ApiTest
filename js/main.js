@@ -306,6 +306,10 @@ function getDataToShow() {
 }
 
 function showFileSize(item) {
+    let item_size = $(item).children('.item_size');
+    if ($(item_size).is(':animated')) {
+        return;
+    }
     let value = $(item).attr('item_data');
     // console.log(value);
     let url = getApiUrl(value);
@@ -333,7 +337,6 @@ function showFileSize(item) {
         success: function (data) {
             // let length = xhr.getResponseHeader('Content-Length');
             let $size = formatSize(data);
-            let item_size = $(item).children('.item_size');
             item_size.text($size);
             item_size.animate({'opacity': 1}, 300);
 
