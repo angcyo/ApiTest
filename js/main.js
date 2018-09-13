@@ -347,6 +347,9 @@ function showFileSize(item) {
 
 function hideFileSize(item) {
     let item_size = $(item).children('.item_size');
+    if ($(item_size).is(':animated')) {
+        return;
+    }
     item_size.animate({'opacity': 0}, 300);
 }
 
