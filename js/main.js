@@ -307,9 +307,12 @@ function getDataToShow() {
 
 function showFileSize(item) {
     let item_size = $(item).children('.item_size');
+    // console.log($(item_size).css('opacity'));
+    // console.log(typeof $(item_size).css('opacity'));
     if ($(item_size).is(':animated')) {
         return;
     }
+    // $(item_size).stop();
     let value = $(item).attr('item_data');
     // console.log(value);
     let url = getApiUrl(value);
@@ -347,9 +350,7 @@ function showFileSize(item) {
 
 function hideFileSize(item) {
     let item_size = $(item).children('.item_size');
-    if ($(item_size).is(':animated')) {
-        return;
-    }
+    // $(item_size).stop();
     item_size.animate({'opacity': 0}, 300);
 }
 
