@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .text {
+            font-family: MountainsofChristmas;
+            font-size: 20px;
+        }
+
+        @font-face {
+            font-family: MountainsofChristmas;
+            src: url("file:///sdcard/YDRecycle/font/MountainsofChristmas.ttf");
+        }
+
+    </style>
+</head>
+<body style="background-color: white;">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function callShareSuccess() {
+        alert("Android调用了分享成功的方法");
+        return "You are pig!"
+    }
+
+    // $(document).ready(function () {
+    //     $('body').append('ready...<br/>');
+    //
+    //     // $.get("file:///sdcard/YDRecycle/text.txt", function (data) {
+    //     //     console.log(data);
+    //     //     //alert(data);
+    //     //     //alert(typeof(data));
+    //     //     $('body').append(data);
+    //     // })
+    //
+    //     var arm = "file:///sdcard/YDRecycle/text.txt";
+    //     var xmlhttp;
+    //     if (window.XMLHttpRequest) {
+    //         xmlhttp = new XMLHttpRequest();
+    //     }
+    //     xmlhttp.onreadystatechange = function () {
+    //         //alert("status is"+xmlhttp.status);
+    //         if (xmlhttp.readyState == 4) {
+    //             console.log(xmlhttp.responseText);
+    //             $('body').append(xmlhttp.responseText);
+    //         }
+    //     };
+    //     xmlhttp.open("GET", arm);
+    //     xmlhttp.send(null);
+    // })
+
+    $(document).ready(function () {
+        $('body').append('ready...<br/>');
+
+        $.get('http://10.10.10.201:801/api/php/html/font.html', function (data) {
+            console.log(data);
+            //alert(data);
+            //alert(typeof(data));
+            $('body').append(data);
+        });
+    });
+</script>
+<p class="text">MountainsofChristmas</p>
+</body>
+</html>
