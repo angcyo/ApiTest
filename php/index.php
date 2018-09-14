@@ -14,19 +14,31 @@ $data_path = 'data';
 createFolder($data_path);
 
 $query_args = $_SERVER['QUERY_STRING'];
+//'www.baidu.com/html/fonttest.html?token=5f2a39e3d87bb35680fc35cdb56255d1832f1587c9376ba2da65d766540f82e90c5c4d4f8dfb78b7be5fb2e04cf296bd&ver=1536892354318';
+//$a = parse_url($query_args);
+//$b = array();
+//parse_str($query_args, $b);
 
 logToFile('request.log',
     getValue('HTTP_USER_AGENT') . "\n" .
-    getValue('REMOTE_ADDR') . ':' . getValue('REMOTE_HOST') . ':' . getValue('REMOTE_PORT') . ':' . getValue('REMOTE_USER') . "\n" .
+    getValue('REMOTE_ADDR') . ':' . getValue('REMOTE_PORT') . '-' . getValue('HTTP_HOST') . '/' . getValue('REQUEST_URI') . "\n" .
     $query_args
 );
 
 if (!empty($query_args)) {
     $query_string = urldecode($query_args);
 
-    logToFile('api_log.log', $query_string);
+    //logToFile('api_log.log', '$query_string:' . $query_string);
     //去掉url中的空格字符
-    $query = preg_replace('# #', '', $query_string);
+    $query_no_space = preg_replace('# #', '', $query_string);
+    $index = stripos($query_no_space, '&');
+    if ($index) {
+        $query = substr($query_no_space, 0, $index);
+    } else {
+        $query = $query_no_space;
+    }
+
+    logToFile('api_log.log', 'query:' . $query_string . "\n" . 'query:' . $query);
 
     // a//b////c/  过滤多余的/分隔符
     $qs = explode('/', $query);
