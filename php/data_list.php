@@ -29,7 +29,7 @@ function read_all($root, $dir, &$result)
                     if ($sub) {
                         $sub_con = iconv('GBK', 'UTF-8', $sub);
                         if ($sub_con) {
-                            $result[] = $sub_con;
+                            $result[] = urldecode($sub_con);
                         } else {
                             $result[] = $sub;
                         }

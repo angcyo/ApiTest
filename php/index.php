@@ -40,34 +40,34 @@ if (!empty($query_args)) {
 
     logToFile('api_log.log', 'query:' . $query_string . "\n" . 'query:' . $query);
 
-    // a//b////c/  过滤多余的/分隔符
-    $qs = explode('/', $query);
-
-    if (empty($qs)) {
-        echo 'no query..';
-    } else {
-        //拿到url中需要对应的路径名, 和文件名
-        $last = end($qs);
-        $url_name = '';
-        $url_path = '';
-        //最后一个是空格
-        if (empty($last)) {
-            //剔除最后一个元素
-            array_pop($qs);
-        }
-//        var_dump($qs);
-
-        // 保证是 a b c 这样的数组, 没有空格元素
-        if (empty($qs)) {
-            echo 'no query';
-        } else {
-            $url_name = array_pop($qs);
-
-            if (!empty($qs)) {
-                $url_path = implode('/', $qs);
-            }
-        }
-    }
+//    // a//b////c/  过滤多余的/分隔符
+//    $qs = explode('/', $query);
+//
+//    if (empty($qs)) {
+//        echo 'no query..';
+//    } else {
+//        //拿到url中需要对应的路径名, 和文件名
+//        $last = end($qs);
+//        $url_name = '';
+//        $url_path = '';
+//        //最后一个是空格
+//        if (empty($last)) {
+//            //剔除最后一个元素
+//            array_pop($qs);
+//        }
+////        var_dump($qs);
+//
+//        // 保证是 a b c 这样的数组, 没有空格元素
+//        if (empty($qs)) {
+//            echo 'no query';
+//        } else {
+//            $url_name = array_pop($qs);
+//
+//            if (!empty($qs)) {
+//                $url_path = implode('/', $qs);
+//            }
+//        }
+//    }
 //    echo "<br/>1:";
 //    var_dump($query);
 //    echo "<br/>2:";
@@ -77,12 +77,13 @@ if (!empty($query_args)) {
 //    echo "<br/>";
 //    exit();
 
-    createFolder($data_path . '/' . $url_path);
+//    createFolder($data_path . '/' . $url_path);
 
     $data = isset($_REQUEST['data']) ? $_REQUEST['data'] : "";
     $act = isset($_REQUEST['act']) ? $_REQUEST['act'] : "";
 
-    $file_name = $data_path . '/' . $url_path . '/' . $url_name;
+//    $file_name = $data_path . '/' . $url_path . '/' . $url_name;
+    $file_name = $data_path . '/' . urlencode($query);
 
     if (empty($act)) {
         //调用接口
