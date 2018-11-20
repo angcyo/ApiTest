@@ -1,4 +1,11 @@
+var project = 'c';
+var platform = 'android';
+
 $(function () {
+    platform = $.cookie('platform') == undefined ? 'android' : $.cookie('platform');
+    project = $.cookie('project') == undefined ? 'c' : $.cookie('project')
+
+
     let clipboard = new ClipboardJS('#copy_url', {
         text: function () {
             return getCurrentUrl();
@@ -75,6 +82,26 @@ $(function () {
     // autoTextarea($('#api_data')[0]);
 
     $('#data_tip_list').scrollbar();
+
+    //平台 项目联通
+    $('#platform').on('change', function () {
+        platform = $('#platform').val();
+        $.cookie('platform', platform);
+        console.log(platform);
+        console.log(getCurrentUrl());
+
+        $('#api_tip').text(getApiUrl($('#api_url').val()));
+    });
+    $('#project').on('change', function () {
+        project = $('#project').val();
+        $.cookie('project', project);
+        console.log(project);
+        console.log(getCurrentUrl());
+
+        $('#api_tip').text(getApiUrl($('#api_url').val()));
+    });
+    $('#platform').val(platform);
+    $('#project').val(project);
 });
 
 function showUrl(url) {
@@ -112,14 +139,14 @@ function save() {
         alertTip("返回数据不能为空.");
     } else {
         const progressBar = showProgressBar();
-
-        $.post('php/' + encodeURI(api_url), {
+        const url = platform + '/' + project + '/' + api_url;
+        $.post('php/' + encodeURI(url), {
             data: api_data,
             'act': 'save'
         }, function (data) {
             //alert("Data Loaded: " + data);
-            console.log(data)
-            alertTip(data)
+            console.log(data);
+            alertTip(data);
             setTimeout(function () {
                 progressBar.finish();
             }, 300);
@@ -192,7 +219,16 @@ function getApiUrl(query) {
     const url = window.location.protocol + '//' + window.location.host + window.location.pathname.replace('index.html', '');
     // console.log(window.location.pathname);
     // console.log(url);
+    const api_path = 'php/' + platform + '/' + project + '/';
+    if (query === undefined) {
+        return url + api_path;
+    } else {
+        return url + api_path + trim(query);
+    }
+}
 
+function getHttpApiUrl(query) {
+    const url = window.location.protocol + '//' + window.location.host + window.location.pathname.replace('index.html', '');
     const api_path = 'php/';
     if (query === undefined) {
         return url + api_path;
@@ -203,27 +239,28 @@ function getApiUrl(query) {
 
 function showDataListTip() {
 // <a href="#" class="list-group-item  ">Cras justo odio</a>
-    $url = getApiUrl('data_list.php');
-    // console.log($url);
-
+    $url = getHttpApiUrl('data_list.php');
+    console.log('请求:' + $url);
     $have = false;
-    $.get(getApiUrl('data_list.php'), function (data) {
-        // console.log(data);
+    $.get(getHttpApiUrl('data_list.php'), function (data) {
+        console.log(data);
+
         $('#data_tip_list').children().remove();
 
         $.each(JSON.parse(data), function (index, item) {
             // console.log(item);
-
             // console.log(item.indexOf($('#api_url').val()));
-
-            if (item.indexOf($('#api_url').val()) === 0) {
+            const prefix = platform + '/' + project + '/';
+            if (item.indexOf(prefix + $('#api_url').val()) === 0) {
                 $have = true;
                 $chid = $('<a></a>');
                 $chid.attr('href', '#');
                 $chid.addClass('list-group-item').addClass('list-group-item-action').addClass('list-group-item-action-r');
-                $chid.text(item);
-                $chid.val('item_data:' + item);
-                $chid.attr('item_data', item);
+
+                const item_text = item.substring(prefix.length);
+                $chid.text(item_text);
+                $chid.val('item_data:' + item_text);
+                $chid.attr('item_data', item_text);
                 $chid.on('click', function () {
                     // console.log($(this).val());
                     //console.log($(this).attr('item_data'));
