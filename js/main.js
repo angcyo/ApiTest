@@ -158,7 +158,11 @@ function initProject(platform) {
         if (platform === p["value"]) {
             //console.log(p["project"]);
             var selectorProject = project;
+            var firstProject = project;
+            var have = false
             for (j  in p["project"]) {
+                firstProject = p["project"][0]['value'];
+
                 var pro = p["project"][j];
                 //console.log(pro);
                 let child = $('<option></option>');
@@ -168,11 +172,17 @@ function initProject(platform) {
 
                 if (pro["value"] === project) {
                     selectorProject = project;
+                    have = true
                 } else {
-                    selectorProject = p["project"][0]['value'];
+                    //selectorProject = p["project"][0]['value'];
                 }
             }
-            $('#project').val(selectorProject);
+
+            if (have) {
+                $('#project').val(selectorProject);
+            } else {
+                $('#project').val(firstProject);
+            }
 
             onProjectChange();
             break
