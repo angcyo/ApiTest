@@ -1,10 +1,32 @@
 var project = 'c';
 var platform = 'android';
 
+const platformArray = [
+    {
+        "title": "Android",
+        "value": "android",
+        "project": [{"title": "C端", "value": "c"}, {"title": "B端", "value": "b"}, {"title": "工单", "value": "w"}]
+    },
+    {
+        "title": "Ios",
+        "value": "ios",
+        "project": [{"title": "C端", "value": "c"}, {"title": "B端", "value": "b"}, {"title": "工单", "value": "w"}]
+    },
+    {
+        "title": "H5",
+        "value": "h5",
+        "project": [{"title": "小游戏", "value": "g"}, {"title": "商城", "value": "s"}]
+    },
+    {
+        "title": "公共测试平台",
+        "value": "common",
+        "project": [{"title": "公有", "value": "p"}]
+    }
+];
+
 $(function () {
     platform = $.cookie('platform') == undefined ? 'android' : $.cookie('platform');
-    project = $.cookie('project') == undefined ? 'c' : $.cookie('project')
-
+    project = $.cookie('project') == undefined ? 'c' : $.cookie('project');
 
     let clipboard = new ClipboardJS('#copy_url', {
         text: function () {
@@ -91,18 +113,72 @@ $(function () {
         console.log(getCurrentUrl());
 
         $('#api_tip').text(getApiUrl($('#api_url').val()));
+
+        initProject(platform)
     });
     $('#project').on('change', function () {
-        project = $('#project').val();
-        $.cookie('project', project);
-        console.log(project);
-        console.log(getCurrentUrl());
-
-        $('#api_tip').text(getApiUrl($('#api_url').val()));
+        onProjectChange();
     });
-    $('#platform').val(platform);
-    $('#project').val(project);
+    initPlatform()
 });
+
+function onProjectChange() {
+    project = $('#project').val();
+    $.cookie('project', project);
+    console.log(project);
+    console.log(getCurrentUrl());
+
+    $('#api_tip').text(getApiUrl($('#api_url').val()));
+}
+
+function initPlatform() {
+    $('#platform').children().remove();
+
+    for (i in platformArray) {
+        var p = platformArray[i];
+        let chid = $('<option></option>');
+        chid.attr('value', p["value"]);
+        chid.text(p["title"]);
+        $('#platform').append(chid);
+    }
+    //$('#project').val(project);
+
+    $('#platform').val(platform);
+
+    console.log(platform);
+    initProject(platform)
+}
+
+function initProject(platform) {
+    $('#project').children().remove();
+
+    for (i in platformArray) {
+        var p = platformArray[i];
+
+        if (platform === p["value"]) {
+            //console.log(p["project"]);
+            var selectorProject = project;
+            for (j  in p["project"]) {
+                var pro = p["project"][j];
+                //console.log(pro);
+                let child = $('<option></option>');
+                child.attr('value', pro["value"]);
+                child.text(pro["title"]);
+                $('#project').append(child);
+
+                if (pro["value"] === project) {
+                    selectorProject = project;
+                } else {
+                    selectorProject = p["project"][0]['value'];
+                }
+            }
+            $('#project').val(selectorProject);
+
+            onProjectChange();
+            break
+        }
+    }
+}
 
 function showUrl(url) {
     $.cookie('api_url', trim(url));
