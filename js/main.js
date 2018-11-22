@@ -58,6 +58,54 @@ $(function () {
 
         showDataListTip();
     });
+    $('#api_url').mouseover(function () {
+        // console.log('鼠标经过:' + $(this).val());
+        if ($("this").is(":focus")) {
+
+        } else {
+            $('.api_url_close').fadeIn();
+        }
+    });
+    $('#api_url').mouseout(function () {
+        // console.log('鼠标离开:' + $(this).val());
+        if ($("this").is(":focus")) {
+
+        } else {
+            console.log();
+            if ($('.api_url_close').is(":hover")) {
+            } else {
+                $('.api_url_close').fadeOut();
+            }
+        }
+    });
+    $('.api_url_close').mouseout(function () {
+        if ($("#api_url").is(":focus")) {
+        } else {
+            $('.api_url_close').fadeOut();
+        }
+    });
+
+    $('#api_url').focusout(function () {
+        //console.log("失去焦点!");
+        //关闭提示框
+        $('.api_url_close').fadeOut();
+        hideDataListTip();
+    });
+    $('#api_url').focus(function () {
+        //console.log("得到焦点!");
+        //显示提示框
+        showDataListTip();
+        $('.api_url_close').fadeIn();
+    });
+    $('.api_url_close').on('click', function () {
+        $('#api_url').val('');
+        setTimeout(function () {
+            //showDataListTip();
+            $('#api_url').focus();
+        }, 300);
+        return false;
+    });
+
     $('#api_data').bind('input propertychange', function () {
         //console.log($(this).val());
         cookieData(this)
@@ -68,17 +116,6 @@ $(function () {
     });
     $('#api_data').focusout(function () {
         cookieData(this, true)
-    });
-    $('#api_url').focusout(function () {
-        //console.log("失去焦点!");
-        //关闭提示框
-        // $('#data_tip_list').fadeOut();
-        hideDataListTip();
-    });
-    $('#api_url').focus(function () {
-        //console.log("得到焦点!");
-        //显示提示框
-        showDataListTip();
     });
 
     $('#api_url').val($.cookie('api_url'));
