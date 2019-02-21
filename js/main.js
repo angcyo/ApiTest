@@ -5,7 +5,7 @@ const platformArray = [
     {
         "title": "Android",
         "value": "android",
-        "project": [{"title": "C端", "value": "c"}, {"title": "B端", "value": "b"}, {"title": "工单", "value": "w"}]
+        "project": [{"title": "C端", "value": "c"}, {"title": "B端", "value": "b"}, {"title": "工单", "value": "w"}, {"title": "伟图", "value": "wayto"}]
     },
     {
         "title": "Ios",
